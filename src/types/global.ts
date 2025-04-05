@@ -5,6 +5,7 @@ export interface Movie {
   backdrop_path: string;
   poster_path: string;
   price: number;
+  overview: string;
 }
 
 export interface MovieRaw {

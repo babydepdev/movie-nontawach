@@ -21,12 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { Cart, Movie, Genre, Video } from "@/types/global";
 import { RootState } from "@/store";
-
-interface SpokenLanguages {
-  iso_639_1: string;
-  name: string;
-  english_name: string;
-}
+import { SpokenLanguage } from "@/types/global";
 
 export default function MovieDetailPage() {
   const { id } = useParams();
@@ -51,6 +46,7 @@ export default function MovieDetailPage() {
         backdrop_path: data?.backdrop_path || "",
         price: data?.price || 0,
         poster_path: data?.poster_path || "",
+        overview: data?.overview || "",
       };
 
       dispatch(addToCart(newItem));
@@ -104,7 +100,7 @@ export default function MovieDetailPage() {
         <div className="flex items-center gap-3 mt-2 text-gray-300">
           <Volume2Icon className="text-gray-400" />
           {data?.spoken_languages?.map(
-            (item: SpokenLanguages, index: number) => (
+            (item: SpokenLanguage, index: number) => (
               <span key={index} className="text-gray-300">
                 {item.iso_639_1.toUpperCase()}
               </span>

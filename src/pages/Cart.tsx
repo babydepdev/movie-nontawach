@@ -22,7 +22,6 @@ import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { removeFromCart, clearCart } from "@/features/cart/cartSlice";
-import { Movie } from "@/types/global";
 import { Cart as CartType } from "@/types/global";
 import { RootState } from "@/store";
 
@@ -65,16 +64,19 @@ export default function Cart() {
 
     if (cart.length >= 5) {
       return cart.reduce(
-        (total: number, item: Movie) => total + item.price * 0.8,
+        (total: number, item: CartType) => total + item.price * 0.8,
         0
       );
     } else if (cart.length >= 3) {
       return cart.reduce(
-        (total: number, item: Movie) => total + item.price * 0.9,
+        (total: number, item: CartType) => total + item.price * 0.9,
         0
       );
     } else {
-      return cart.reduce((total: number, item: Movie) => total + item.price, 0);
+      return cart.reduce(
+        (total: number, item: CartType) => total + item.price,
+        0
+      );
     }
   };
 
@@ -159,7 +161,7 @@ export default function Cart() {
                   Total Price:{" "}
                   {cart
                     .reduce(
-                      (total: number, item: Movie) => total + item.price,
+                      (total: number, item: CartType) => total + item.price,
                       0
                     )
                     .toLocaleString("en-US", {

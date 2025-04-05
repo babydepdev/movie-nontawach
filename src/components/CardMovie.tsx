@@ -11,29 +11,29 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { addToCart } from "@/features/cart/cartSlice";
 import { toast } from "sonner";
+import { Cart, Movie } from "@/types/global";
+import { RootState } from "@/store";
 
-interface MovieItem {
-  id: number;
-  original_title: string;
-  release_date: string;
-  backdrop_path: string;
-  price: number;
+interface Props {
+  data: Movie;
 }
 
-const CardMovie = ({ data }: any) => {
-  const cart: MovieItem[] = useSelector((state: any) => state.cart.items);
+const CardMovie = ({ data }: Props) => {
+  const cart = useSelector((state: RootState) => state.cart.items);
 
   const dispatch = useDispatch();
 
   const handleAddToCart = () => {
-    const existingItem = cart.find((item: any) => item.id === data?.id);
+    const existingItem = cart.find((item: Cart) => item.id === data?.id);
     if (!existingItem) {
-      const newItem: MovieItem = {
+      const newItem: Movie = {
         id: data?.id,
         original_title: data?.original_title,
         release_date: data?.release_date,
         backdrop_path: data?.backdrop_path,
         price: data?.price,
+        poster_path: data?.poster_path,
+        overview: data?.overview,
       };
       dispatch(addToCart(newItem));
       toast.success("Movie added to cart");
@@ -47,9 +47,9 @@ const CardMovie = ({ data }: any) => {
       <HoverCardTrigger asChild>
         <Link to={`/movie/${data.id}`}>
           <img
-            src={`https://image.tmdb.org/t/p/original/${data.poster_path}`}
+            src={`${import.meta.env.VITE_TMDB_IMAGE_BASE_URL}${data.poster_path}`}
             className="rounded-lg cursor-pointer hover:scale-105 transition-transform h-full"
-            alt={data.title || "Movie Poster"}
+            alt={data.original_title || "Movie Poster"}
           />
         </Link>
       </HoverCardTrigger>
@@ -57,12 +57,12 @@ const CardMovie = ({ data }: any) => {
       <HoverCardContent>
         {data.backdrop_path && (
           <img
-            src={`https://image.tmdb.org/t/p/original/${data.backdrop_path}`}
+            src={`${import.meta.env.VITE_TMDB_IMAGE_BASE_URL}${data.backdrop_path}`}
             className="w-full rounded-md"
             alt="Movie Backdrop"
           />
         )}
-        <h2 className="text-xl font-bold">{data.title}</h2>
+        <h2 className="text-xl font-bold">{data.original_title}</h2>
         <p className="text-red-500 my-4 text-semibold">
           <Badge variant="destructive" className="text-sm">
             Price : {""}

@@ -36,6 +36,7 @@ export default function MoviesPopular() {
         backdrop_path: randomMovie?.backdrop_path || "",
         price: randomMovie?.price || 0,
         poster_path: randomMovie?.poster_path || "",
+        overview: randomMovie?.overview || "",
       };
 
       dispatch(addToCart(newItem));
@@ -53,7 +54,7 @@ export default function MoviesPopular() {
         <div className="relative w-full h-[40vh] lg:h-[60vh]">
           <div className="absolute inset-0">
             <img
-              src={`https://image.tmdb.org/t/p/original/${randomMovie?.backdrop_path}`}
+              src={`${import.meta.env.VITE_TMDB_IMAGE_BASE_URL}${randomMovie?.backdrop_path}`}
               className="w-full h-full object-cover"
               alt={randomMovie?.original_title}
             />
