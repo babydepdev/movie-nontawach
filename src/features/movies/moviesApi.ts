@@ -4,10 +4,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const moviesApi = createApi({
   reducerPath: "moviesApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://api.themoviedb.org/3",
+    baseUrl: import.meta.env.VITE_TMDB_BASE_URL,
     headers: {
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjZDFmY2VmN2UyYzU1M2RhOTRkODY2YjlmY2Q1NjBmZCIsIm5iZiI6MTc0MzY3NjQxMy40NjQsInN1YiI6IjY3ZWU2M2ZkNDY4MGYyNmJmM2E3YTdhMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.GFi_QQuJEiJylFatosVVOpMcD2S2xKgxYSu6T-EaWPg",
+      Authorization: `Bearer ${import.meta.env.VITE_TMDB_ACCESS_TOKEN}`,
     },
   }),
   endpoints: (builder) => ({
@@ -19,7 +18,6 @@ export const moviesApi = createApi({
         total_pages: number;
         total_results: number;
       }) => {
-        console.log(response);
         return {
           ...response,
           results: response.results.map((item: MovieRaw) => {

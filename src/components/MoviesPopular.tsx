@@ -1,4 +1,4 @@
-import CardMovie from "@/utils/CardMovie";
+import CardMovie from "./CardMovie";
 import { useGetMoviesPopularQuery } from "../features/movies/moviesApi";
 import {
   Carousel,
