@@ -3,7 +3,7 @@ const Footer = () => {
     <>
       <footer className="bg-black text-white text-center p-4 w-full">
         <p className="text-sm">
-          Made with ❤️ by{" "}
+          Created by{" "}
           <a
             href="https://github.com/babydepdev"
             target="_blank"

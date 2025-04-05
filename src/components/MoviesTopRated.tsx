@@ -8,9 +8,11 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Movie } from "@/types/global";
+import Loading from "@/utils/Loading";
 
 export default function MoviesPopular() {
-  const { data } = useGetMovieTopRatedQuery({});
+  const { data, isLoading } = useGetMovieTopRatedQuery({});
+  if (isLoading) return <Loading />;
 
   return (
     <>

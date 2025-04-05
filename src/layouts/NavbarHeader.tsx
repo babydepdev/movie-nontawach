@@ -1,10 +1,4 @@
 import { Button } from "@/components/ui/button";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
 import { AlignJustifyIcon, ShoppingCartIcon, XIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
@@ -16,22 +10,18 @@ import { useEffect, useState, useRef } from "react";
 import { useGetMovieByNameQuery } from "@/features/movies/moviesApi";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useGetMovieGenresQuery } from "@/features/movies/moviesApi";
-import {
-  NavigationMenuContent,
-  NavigationMenuTrigger,
-} from "@radix-ui/react-navigation-menu";
 import { useSelector } from "react-redux";
-
+import { RootState } from "@/store";
+import { Cart, Movie } from "@/types/global";
 
 export default function NavbarHeader() {
-  const cart = useSelector((state: any) => state.cart.items);
+  const cart = useSelector((state: RootState) => state.cart?.items ?? []);
+
   const [keyword, setKeyword] = useState<string>("");
   const { data, isLoading } = useGetMovieByNameQuery(keyword, {
     refetchOnMountOrArgChange: true,
   });
 
-  const { data: genres } = useGetMovieGenresQuery({});
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -70,36 +60,6 @@ export default function NavbarHeader() {
               height={2000}
             />
           </Link>
-          <NavigationMenu className="hidden lg:flex">
-            {/* <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <Link to="/">Home</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger asChild>
-                  <NavigationMenuLink asChild>
-                    <Link to="/movie">Movie</Link>
-                  </NavigationMenuLink>
-                </NavigationMenuTrigger>
-                <NavigationMenuContent className="bg-black p-4 max-h-96 overflow-y-auto w-80">
-                  <div className="grid grid-cols-2 gap-2">
-                    {genres?.genres?.map((item: any, index: number) => (
-                      <Link
-                        to={`/movie/genre/${item.id}`}
-                        key={`genre-${index}`}
-                      >
-                        <div className="p-2 text-white hover:bg-gray-700 rounded-md text-sm">
-                          {item.name}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList> */}
-          </NavigationMenu>
         </div>
         {/* Menu Mobile */}
         <div className="lg:hidden">
@@ -133,7 +93,7 @@ export default function NavbarHeader() {
               onFocus={() => setShowSearchResults(true)}
               className="w-96 h-10 bg-gray-800 text-white placeholder:text-gray-400"
             />
-            {showSearchResults && data?.results?.length > 0 && (
+            {showSearchResults && (
               <ScrollArea>
                 <div className="absolute z-50 mt-2 bg-gray-800 rounded-sm overflow-auto max-h-200 w-96">
                   {isLoading && (
@@ -141,7 +101,7 @@ export default function NavbarHeader() {
                       <p className="text-white">Loading...</p>
                     </div>
                   )}
-                  {data?.results?.map((item: any, index: number) => (
+                  {data?.results?.map((item: Movie, index: number) => (
                     <Link to={`/movie/${item.id}`} key={`movie-${index}`}>
                       <div className="flex gap-2 p-2  text-white hover:bg-gray-700">
                         <img
@@ -150,7 +110,7 @@ export default function NavbarHeader() {
                               ? `https://image.tmdb.org/t/p/w500/${item?.poster_path}`
                               : "https://dummyimage.com/500x750/000/fff"
                           } `}
-                          alt={item.title}
+                          alt={item?.original_title}
                           className="w-16 h-24 rounded-lg"
                         />
                         <div>
@@ -182,7 +142,7 @@ export default function NavbarHeader() {
             <HoverCardContent side="bottom">
               {cart?.length > 0 ? (
                 <div className="flex flex-col gap-2">
-                  {cart?.map((item: any, index: number) => (
+                  {cart?.map((item: Cart, index: number) => (
                     <Link to={`/movie/${item.id}`} key={`cart-${index}`}>
                       <div className="flex gap-2 p-2  text-white hover:bg-gray-700">
                         <img
@@ -191,7 +151,7 @@ export default function NavbarHeader() {
                               ? `https://image.tmdb.org/t/p/w500/${item?.poster_path}`
                               : "https://dummyimage.com/500x750/000/fff"
                           } `}
-                          alt={item.title}
+                          alt={item?.original_title}
                           className="w-16 h-24 rounded-lg"
                         />
                         <div>

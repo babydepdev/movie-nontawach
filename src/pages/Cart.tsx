@@ -23,9 +23,11 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { removeFromCart, clearCart } from "@/features/cart/cartSlice";
 import { Movie } from "@/types/global";
+import { Cart as CartType } from "@/types/global";
+import { RootState } from "@/store";
 
 export default function Cart() {
-  const cart = useSelector((state: any) => state.cart.items);
+  const cart = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
@@ -95,7 +97,7 @@ export default function Cart() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {cart?.map((item: any, index: number) => (
+                  {cart?.map((item: CartType, index: number) => (
                     <TableRow key={`cart-item-${index}`}>
                       <TableCell className="flex items-center gap-2 text-black">
                         <img

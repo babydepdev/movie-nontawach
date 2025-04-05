@@ -14,26 +14,28 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/features/cart/cartSlice";
 import { toast } from "sonner";
-import { Movie } from "@/types/global";
+import { Cart, Movie } from "@/types/global";
+import Loading from "@/utils/Loading";
+import type { RootState } from "@/store";
 
 export default function MoviesPopular() {
-  const cart = useSelector((state: any) => state.cart.items);
-  const { data } = useGetMoviesPopularQuery({});
+  const cart = useSelector((state: RootState) => state.cart?.items ?? []);
+  const { data, isLoading } = useGetMoviesPopularQuery({});
   const dispatch = useDispatch();
 
   const randomMovie =
     data?.results?.[Math.floor(Math.random() * data?.results?.length)];
 
   const handleAddToCart = () => {
-    const existingItem = cart.find((item: any) => item.id === randomMovie?.id);
+    const existingItem = cart.find((item: Cart) => item.id === randomMovie?.id);
     if (!existingItem) {
       const newItem: Movie = {
-        id: randomMovie?.id,
-        original_title: randomMovie?.original_title,
-        release_date: randomMovie?.release_date,
-        backdrop_path: randomMovie?.backdrop_path,
-        price: randomMovie?.price,
-        poster_path: randomMovie?.poster_path,
+        id: randomMovie?.id || 0,
+        original_title: randomMovie?.original_title || "",
+        release_date: randomMovie?.release_date || "",
+        backdrop_path: randomMovie?.backdrop_path || "",
+        price: randomMovie?.price || 0,
+        poster_path: randomMovie?.poster_path || "",
       };
 
       dispatch(addToCart(newItem));
@@ -43,6 +45,8 @@ export default function MoviesPopular() {
     }
   };
 
+  if (isLoading) return <Loading />;
+
   return (
     <>
       <div className="relative w-full">
@@ -51,7 +55,7 @@ export default function MoviesPopular() {
             <img
               src={`https://image.tmdb.org/t/p/original/${randomMovie?.backdrop_path}`}
               className="w-full h-full object-cover"
-              alt={data?.original_title}
+              alt={randomMovie?.original_title}
             />
 
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#141414] "></div>

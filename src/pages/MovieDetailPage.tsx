@@ -19,7 +19,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Movie } from "@/types/global";
+import { Cart, Movie, Genre, Video } from "@/types/global";
+import { RootState } from "@/store";
 
 interface SpokenLanguages {
   iso_639_1: string;
@@ -31,7 +32,7 @@ export default function MovieDetailPage() {
   const { id } = useParams();
   const { data, isLoading } = useGetMovieByIdQuery(Number(id));
   const { data: videos } = useGetVideoByIdQuery(Number(id));
-  const cart = useSelector((state: any) => state.cart.items);
+  const cart = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -41,15 +42,15 @@ export default function MovieDetailPage() {
   }, [data]);
 
   const handleAddToCart = () => {
-    const existingItem = cart.find((item: any) => item.id === data?.id);
+    const existingItem = cart.find((item: Cart) => item.id === data?.id);
     if (!existingItem) {
       const newItem: Movie = {
-        id: data?.id,
-        original_title: data?.original_title,
-        release_date: data?.release_date,
-        backdrop_path: data?.backdrop_path,
-        price: data?.price,
-        poster_path: data?.poster_path,
+        id: data?.id || 0,
+        original_title: data?.original_title || "",
+        release_date: data?.release_date || "",
+        backdrop_path: data?.backdrop_path || "",
+        price: data?.price || 0,
+        poster_path: data?.poster_path || "",
       };
 
       dispatch(addToCart(newItem));
@@ -85,17 +86,12 @@ export default function MovieDetailPage() {
             alt={data?.original_title}
           />
         )}
-        {/* <img
-          src={`https://image.tmdb.org/t/p/original/${data?.backdrop_path}`}
-          className="w-full h-full object-cover flex lg:hidden"
-          alt={data?.original_title}
-        /> */}
 
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#141414]"></div>
       </div>
       <div className="relative z-10 container mx-auto h-full flex flex-col justify-end pb-20 px-4">
         <div className="flex items-center gap-3 mt-2 text-gray-300">
-          {data?.genres?.map((genre: any, index: number) => (
+          {data?.genres?.map((genre: Genre, index: number) => (
             <span key={index} className="text-white text-lg font-medium">
               {genre.name}
             </span>
@@ -142,7 +138,7 @@ export default function MovieDetailPage() {
   );
 }
 
-export function VideoPlayer({ video }: { video: any }) {
+export function VideoPlayer({ video }: { video: Video }) {
   return (
     <Dialog>
       <DialogTrigger asChild>

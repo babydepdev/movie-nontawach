@@ -1,3 +1,4 @@
+import { MovieById, MovieRaw } from "@/types/global";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const moviesApi = createApi({
@@ -12,12 +13,18 @@ export const moviesApi = createApi({
   endpoints: (builder) => ({
     getMoviesPopular: builder.query({
       query: () => `/movie/popular`,
-      transformResponse: (response: any) => {
+      transformResponse: (response: {
+        page: number;
+        results: MovieRaw[];
+        total_pages: number;
+        total_results: number;
+      }) => {
+        console.log(response);
         return {
           ...response,
-          results: response.results.map((movie: any) => {
+          results: response.results.map((item: MovieRaw) => {
             return {
-              ...movie,
+              ...item,
               price: 100,
             };
           }),
@@ -26,7 +33,7 @@ export const moviesApi = createApi({
     }),
     getMovieById: builder.query({
       query: (id: number) => `/movie/${id}`,
-      transformResponse: (response: any) => {
+      transformResponse: (response: MovieById) => {
         return {
           ...response,
           price: 100,
@@ -35,12 +42,17 @@ export const moviesApi = createApi({
     }),
     getMovieByName: builder.query({
       query: (name: string) => `/search/movie?query=${name}`,
-      transformResponse: (response: any) => {
+      transformResponse: (response: {
+        page: number;
+        results: MovieRaw[];
+        total_pages: number;
+        total_results: number;
+      }) => {
         return {
           ...response,
-          results: response.results.map((movie: any) => {
+          results: response.results.map((item: MovieRaw) => {
             return {
-              ...movie,
+              ...item,
               price: 100,
             };
           }),
@@ -52,12 +64,17 @@ export const moviesApi = createApi({
     }),
     getMovieTopRated: builder.query({
       query: () => `/movie/top_rated`,
-      transformResponse: (response: any) => {
+      transformResponse: (response: {
+        page: number;
+        results: MovieRaw[];
+        total_pages: number;
+        total_results: number;
+      }) => {
         return {
           ...response,
-          results: response.results.map((movie: any) => {
+          results: response.results.map((item: MovieRaw) => {
             return {
-              ...movie,
+              ...item,
               price: 100,
             };
           }),

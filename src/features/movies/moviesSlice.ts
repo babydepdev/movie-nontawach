@@ -1,9 +1,9 @@
+import { Movie } from "@/types/global";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-// import store from "../../app/store";
 
 interface MoviesState {
-  movies: any[];
+  movies: Movie[];
 }
 
 const initialState: MoviesState = {
@@ -14,12 +14,12 @@ export const moviesSlice = createSlice({
   name: "movies",
   initialState,
   reducers: {
-    addMovie: (state, action: PayloadAction<any>) => {
+    addMovie: (state, action: PayloadAction<Movie>) => {
       state.movies.push(action.payload);
     },
-    removeMovie: (state, action: PayloadAction<any>) => {
+    removeMovie: (state, action: PayloadAction<Movie>) => {
       state.movies = state.movies.filter(
-        (movie: any) => movie.id !== action.payload
+        (movie: Movie) => movie.id !== action.payload.id
       );
     },
   },
